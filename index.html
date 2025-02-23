@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日记忆单词</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .date-info {
+            margin-top: 20px;
+        }
+
+        .date, .days-left {
+            display: block;
+            font-size: 18px;
+            color: #333;
+        }
+
+        @media (min-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .container {
+                width: 80%;
+            }
+
+            .image-container {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 767px) {
+            body {
+                flex-direction: column;
+                padding: 0;
+            }
+
+            .container {
+                width: 100%;
+            }
+
+            .image-container img {
+                width: 100%;
+            }
+
+            .date-info {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image-container">
+            <img src="" alt="每日记忆单词" id="word-image">
+        </div>
+        <div class="date-info">
+            <span class="date" id="date"></span>
+            <span class="days-left" id="days-left"></span>
+        </div>
+    </div>
+    <script>
+        function formatDate(date) {
+            const daysOfWeek = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const weekDay = daysOfWeek[date.getDay()];
+
+            return `${year}年${month}月${day}日, ${weekDay}`;
+        }
+
+        function calculateDaysLeft(targetDate) {
+            const today = new Date();
+            const diffTime = targetDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        }
+
+        function getImageForDay(day) {
+            const totalImages = 200;  // 图片数量
+            const imageIndex = (day % totalImages) + 1;  // 计算余数并确保索引在 1 到 200 之间
+            const imagePath = `./db/word (${imageIndex}).jpg`; // 拼接文件名
+
+            // 使用 encodeURIComponent 编码路径
+            return encodeURIComponent(imagePath);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const todayDate = new Date();
+            const targetDate = new Date('2025-12-20');  // 考研日期
+            const dateString = formatDate(todayDate);
+            const daysLeft = calculateDaysLeft(targetDate);
+
+            // 更新日期和剩余天数
+            document.getElementById('date').textContent = dateString;
+            document.getElementById('days-left').textContent = `距离26考研还有${daysLeft}天`;
+
+            // 获取对应的图片
+            const imagePath = getImageForDay(daysLeft);
+            console.log("正在加载图片:", imagePath);  // 调试输出，查看图片路径
+
+            // 更新图片路径
+            const imageElement = document.getElementById('word-image');
+            imageElement.src = imagePath;
+
+            // 检查图片是否加载成功
+            imageElement.onload = () => {
+                console.log("图片加载成功！");
+            };
+
+            imageElement.onerror = () => {
+                console.log("图片加载失败，请检查路径！");
+            };
+        });
+    </script>
+</body>
+</html>
