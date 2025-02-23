@@ -110,11 +110,12 @@
             const totalImages = 200;  // 图片数量
             const imageIndex = (day % totalImages) + 1;  // 计算余数并确保索引在 1 到 200 之间
             // const imagePath = `./db/word (${imageIndex}).jpg`; // 拼接文件名
-            const imagePath = `https://cdn.jsdelivr.net/gh/neoluxis/WordForTheDay/db/word (${imageIndex}).jpg`;
+            const imagePath = `https://cdn.jsdelivr.net/gh/neoluxis/WordForTheDay/db/word%20(${imageIndex}).jpg`;
 
 
             // 使用 encodeURIComponent 编码路径
-            return encodeURIComponent(imagePath);
+            // return encodeURIComponent(imagePath);
+            return imagePath;
         }
 
         document.addEventListener('DOMContentLoaded', function() {
